@@ -11,7 +11,9 @@ public class Matcher {
 	}
 	
 	public void matchFCFS () {
+		boolean changed;
 		while (true) {
+			changed = false;
 			for (int i = 0; i < rooms.length; i++) {
 				for (int j = 0; j < rooms[i].preferencesSize(); j++) {
 					if (!rooms[i].isFull()) {
@@ -19,6 +21,7 @@ public class Matcher {
 						if (!rooms[i].getPreference(j).isInRoom()) { //nullpointer
 							rooms[i].addPerson(rooms[i].getPreference(j)); //??
 							rooms[i].getPreference(j).setIstRoom(rooms[i]);
+							changed = true;
 							break;
 						}
 						else {
@@ -27,13 +30,14 @@ public class Matcher {
 								rooms[i].getPreference(j).getIstRoom().removePerson(rooms[i].getPreference(j));
 								rooms[i].addPerson(rooms[i].getPreference(j));
 								rooms[i].getPreference(j).setIstRoom(rooms[i]);
+								changed = true;
 								break;
 							}
 						}
 					}
 				}
 			}
-			if (allRoomsFull() || allPersonsMatched()) {
+			if (allRoomsFull() || !changed) {
 				break;
 			}
 		}

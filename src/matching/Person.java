@@ -49,13 +49,15 @@ public class Person {
 		if (!isInRoom()) return true;
 		int prefThisRoom = Integer.MAX_VALUE;
 		
+		//preference of current room
 		for (int i = 0; i < preferences.length; i++) {
-			if (preferences[i].equals(isInRoom())) {
+			if (preferences[i].equals(isRoom)) {
 				prefThisRoom = i;
 				break;
 			}
 		}
 		
+		//preference of other room
 		for (int i = 0; i < preferences.length; i++) {
 			if (preferences[i].equals(room)) {
 				return i < prefThisRoom;
@@ -66,7 +68,7 @@ public class Person {
 	
 	@Override
 	public String toString () {
-		String content = this.name + ";" + this.isRoom + ";;";
+		String content = this.name + ";" + this.isRoom.getName() + ";;";
 		for (Room r : preferences) {
 			content += r.getName() + ";";
 		}
