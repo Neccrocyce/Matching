@@ -56,6 +56,17 @@ public class CsvReader {
 	 * @return 
 	 */
 	private void extract(int type, String file) throws IllegalArgumentException{
+		//replaces "," by ";"
+		boolean escaped = false;
+		for (int i = 0; i < file.length(); i++) {
+			if (file.charAt(i) == '"') {
+				escaped = !escaped;
+			}
+			if (file.charAt(i) == ',' && !escaped) {
+				file = file.substring(0, i) + ";" + file.substring(i + 1);
+			}
+		}
+		
 		String obj[] = file.split(file.contains("\r") ? "\r\n" : "\n");
 		
 		if (type == TYPE_ROOM) {

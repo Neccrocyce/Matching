@@ -44,16 +44,22 @@ public class Room {
 		return this.preferences[index];
 	}
 	
-	public Person[] getPreferences () {
-		return this.preferences;
-	}
-	
-	public void addPerson (Person person) {
+	/**
+	 * 
+	 * @param person
+	 * @throws IllegalArgumentException
+	 */
+	public void addPerson (Person person) throws IllegalArgumentException {
+		if (personsInRoom.contains(person)) {
+			throw new IllegalArgumentException("Person " + person.getName() + " is in room " + this.name + " already");
+		}
 		personsInRoom.add(person);
 	}
 	
-	public void removePerson (Person person) {
-		personsInRoom.remove(person);
+	public void removePerson (Person person) throws IllegalArgumentException {
+		if (!personsInRoom.remove(person)) {
+			throw new IllegalArgumentException("Person " + person.getName() + "is not in room " + this.name);
+		}
 	}
 	
 	public Person getPerson (int index) {
