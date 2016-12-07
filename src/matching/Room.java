@@ -27,7 +27,11 @@ public class Room {
 			for (Person person : persons) {
 				if (person.equals(preferences[i])) {
 					preferences[i] = person;
+					break;
 				}
+			}
+			if (!preferences[i].existPreferences()) {
+				throw new IllegalArgumentException("Person \"" + preferences[i].getName() + "\" does not exist");
 			}
 		}
 	}

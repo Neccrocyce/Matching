@@ -5,13 +5,25 @@ public class Person {
 	private final Room[] preferences;
 	private Room isRoom;
 	
-	public Person (String name, Room[] preferences) {
+	public Person (String name, Room[] preferences, boolean random) {
 		this.name = name;
+		if (random) {
+			for (int i = 0; i < preferences.length; i++) {
+				int rand = (int) (Math.random() * preferences.length);
+				Room temp = preferences[i];
+				preferences[i] = preferences[rand];
+				preferences[rand] = temp;						
+			}
+		}
 		this.preferences = preferences;
 	}
 	
+	public Person (String name, Room[] preferences) {
+		this(name, preferences, false);
+	}
+	
 	public Person (String name) {
-		this(name, null);
+		this(name, null, false);
 	}
 	
 	public String getName () {
@@ -28,6 +40,10 @@ public class Person {
 	
 	public Room getPreference (int index) {
 		return preferences[index];
+	}
+	
+	public boolean existPreferences () {
+		return preferences != null;
 	}
 	
 	@Override

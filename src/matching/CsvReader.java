@@ -1,7 +1,6 @@
 package matching;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -31,6 +30,7 @@ public class CsvReader {
 	 * @param file
 	 * @return content of file as String or null if some error occurred
 	 */
+	@SuppressWarnings("unused")
 	private String read (File file) {
 		String in = "";
 		FileReader r = null;
@@ -44,7 +44,9 @@ public class CsvReader {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			s.close();
+			if (s != null) {
+				s.close();
+			}
 			return null;
 		}
 		return in;
@@ -67,8 +69,10 @@ public class CsvReader {
 			}
 		}
 		
+		//split each room/ person
 		String obj[] = file.split(file.contains("\r") ? "\r\n" : "\n");
 		
+		//create object
 		if (type == TYPE_ROOM) {
 			rooms = new Room[obj.length];
 		}
@@ -76,11 +80,12 @@ public class CsvReader {
 			persons = new Person[obj.length];
 		}
 		
+		//
 		for (int i = 0; i < obj.length; i++) {
 			String val[] = obj[i].split(";");
-			//test for empty spaces
+			//test for empty lines
 			if (val.length < 2) {
-				throw new IllegalArgumentException("Empty spaces in " + (type == TYPE_ROOM ? "Rooms" : "Persons"));
+				throw new IllegalArgumentException("Empty line in " + (type == TYPE_ROOM ? "Rooms" : "Persons"));
 			}
 			
 			//set name
@@ -101,14 +106,24 @@ public class CsvReader {
 				rooms[i] = new Room(name, capacity, pref);
 			}
 			else {
+				boolean random = false;
 				Room[] preference = new Room[pref.length];
 				for (int j = 0; j < preference.length; j++) {
 					preference[j] = findRoom(pref[j]);
 					if (preference[j] == null) {
+						if (pref[j].equals("random")) {
+							random = true;
+							break;
+						}
 						throw new IllegalArgumentException("Preference " + pref[j] + " of Person " + i + " " + (name) + " does not exist");
 					}
 				}
-				persons[i] = new Person(name, preference);
+				if (random) {
+					persons[i] = new Person(name, rooms.clone(), true);
+				}
+				else {
+					persons[i] = new Person(name, preference);
+				}
 			}
 		}
 	}
@@ -129,6 +144,11 @@ public class CsvReader {
 		return persons;
 	}
 	
+	/**
+	 * 
+	 * @param name
+	 * @return room with name {@code name} or null if no matches were found
+	 */
 	private Room findRoom (String name) {
 		for (Room room : rooms) {
 			if (room.getName().equals(name)) {
