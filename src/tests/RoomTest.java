@@ -131,6 +131,25 @@ public class RoomTest {
 	}
 	
 	@Test
+	public void numberOfFreeSlots () {
+		assertEquals(1, r[0].numberOfFreeSlots());
+		r[0].addPerson(p1);
+		assertEquals(0, r[0].numberOfFreeSlots());
+		r[0].addPerson(p2);
+		assertEquals(-1, r[0].numberOfFreeSlots());
+		r[0].addPerson(p3);
+		assertEquals(-2, r[0].numberOfFreeSlots());
+		
+		assertEquals(2, r[1].numberOfFreeSlots());
+		r[1].addPerson(p1);
+		assertEquals(1, r[1].numberOfFreeSlots());
+		r[1].addPerson(p2);
+		assertEquals(0, r[1].numberOfFreeSlots());
+		r[1].addPerson(p3);
+		assertEquals(-1, r[1].numberOfFreeSlots());
+	}
+	
+	@Test
 	public void equalsTest () {
 		assertEquals(true, r[0].equals(r[0]));
 		assertEquals(true, r[1].equals(r[1]));

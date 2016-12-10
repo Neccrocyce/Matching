@@ -1,9 +1,9 @@
 package matching;
 
 public class Person {
-	private final String name;
-	private final Room[] preferences;
-	private Room isRoom;
+	protected final String name;
+	protected final Room[] preferences;
+	protected Room isRoom;
 	
 	public Person (String name, Room[] preferences, boolean random) {
 		this.name = name;

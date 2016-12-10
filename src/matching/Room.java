@@ -74,13 +74,17 @@ public class Room {
 		return personsInRoom.size() >= capacity;
 	}
 	
+	public int numberOfFreeSlots () {
+		return capacity - personsInRoom.size();
+	}
+	
 	@Override
 	public boolean equals (Object room) {
 		try {
 			Room r = (Room) room;
 			return r.getName() == this.getName();
 		}
-		catch (ClassCastException e){
+		catch (ClassCastException | NullPointerException e){
 			return false;
 		}
 	}

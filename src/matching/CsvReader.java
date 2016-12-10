@@ -90,6 +90,7 @@ public class CsvReader {
 			
 			//set name
 			String name = val[0];
+			
 			//set capacity
 			int capacity = 0;
 			try {
@@ -107,6 +108,7 @@ public class CsvReader {
 			}
 			else {
 				boolean random = false;
+				boolean indifferent = false;
 				Room[] preference = new Room[pref.length];
 				for (int j = 0; j < preference.length; j++) {
 					preference[j] = findRoom(pref[j]);
@@ -115,11 +117,18 @@ public class CsvReader {
 							random = true;
 							break;
 						}
+						else if (pref[j].equals("indif")) {
+							indifferent = true;
+							break;
+						}
 						throw new IllegalArgumentException("Preference " + pref[j] + " of Person " + i + " " + (name) + " does not exist");
 					}
 				}
 				if (random) {
 					persons[i] = new Person(name, rooms.clone(), true);
+				}
+				else if (indifferent) {
+					persons[i] = new PersonIndifferent(name, rooms.clone());
 				}
 				else {
 					persons[i] = new Person(name, preference);
@@ -128,8 +137,15 @@ public class CsvReader {
 		}
 	}
 	
-	public Room[] extractRoomsFromFile (File file) {
+	public Room[] extractRoomsFromFile (File file) throws IllegalArgumentException {
 		extract(TYPE_ROOM, read(file));
+		for (int i = 0; i < rooms.length; i++) {
+			for (int j = i+1; j < rooms.length; j++) {
+				if (rooms[i] == rooms[j]) {
+					throw new IllegalArgumentException("Room " + rooms[i].getName() + "exists already");
+				}
+			}
+		}
 		return rooms;
 	}
 	
