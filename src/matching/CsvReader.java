@@ -53,7 +53,7 @@ public class CsvReader {
 	}
 	
 	/**
-	 * extract the date got from the svg file and create Room/ Person Objects
+	 * extract the date got from the csv file and create Room/ Person Objects
 	 * @param type 0: Room, 1: Person
 	 * @return 
 	 */
