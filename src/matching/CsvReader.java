@@ -18,7 +18,7 @@ public class CsvReader {
 		persons = null;
 	}
 	
-	public static CsvReader getIntance () {
+	public static CsvReader getInstance () {
 		if (instance == null) {
 			instance = new CsvReader();
 		}
@@ -83,9 +83,9 @@ public class CsvReader {
 		//
 		for (int i = 0; i < obj.length; i++) {
 			String val[] = obj[i].split(";");
-			//test for empty lines
+			//test for too less arguments
 			if (val.length < 2) {
-				throw new IllegalArgumentException("Empty line in " + (type == TYPE_ROOM ? "Rooms" : "Persons"));
+				throw new IllegalArgumentException("Too less arguments at " + (type == TYPE_ROOM ? "Room" : "Person") + i + " \"" + val[0] + "\"");
 			}
 			
 			//set name
@@ -96,7 +96,7 @@ public class CsvReader {
 			try {
 				capacity = Integer.parseInt(val[1]);
 			} catch (NumberFormatException e) {
-				if (type == TYPE_ROOM) throw new IllegalArgumentException("Capacity at " + (type == TYPE_ROOM ? "Room " : "Person ") + i + " " + (name) + " is not valid");
+				if (type == TYPE_ROOM) throw new IllegalArgumentException("Capacity at " + (type == TYPE_ROOM ? "Room" : "Person") + i + " \"" + (name) + "\" is not valid");
 			}
 			//set preferences
 			String[] pref = new String[val.length - 2];
@@ -121,7 +121,7 @@ public class CsvReader {
 							indifferent = true;
 							break;
 						}
-						throw new IllegalArgumentException("Preference " + pref[j] + " of Person " + i + " " + (name) + " does not exist");
+						throw new IllegalArgumentException("Preference \"" + pref[j] + "\" of Person" + i + " \"" + (name) + "\" does not exist");
 					}
 				}
 				if (random) {
@@ -141,8 +141,8 @@ public class CsvReader {
 		extract(TYPE_ROOM, read(file));
 		for (int i = 0; i < rooms.length; i++) {
 			for (int j = i+1; j < rooms.length; j++) {
-				if (rooms[i] == rooms[j]) {
-					throw new IllegalArgumentException("Room " + rooms[i].getName() + "exists already");
+				if (rooms[i].equals(rooms[j])) {
+					throw new IllegalArgumentException("Room " + rooms[i].getName() + " exists already");
 				}
 			}
 		}
@@ -154,6 +154,13 @@ public class CsvReader {
 			throw new NullPointerException("Rooms do not exists");
 		}
 		extract(TYPE_PERSON, read(file));
+		for (int i = 0; i < persons.length; i++) {
+			for (int j = i+1; j < persons.length; j++) {
+				if (persons[i].equals(persons[j])) {
+					throw new IllegalArgumentException("Person " + persons[i].getName() + " exists already");
+				}
+			}
+		}
 		for (Room r : rooms) {
 			r.setPreferences(persons);
 		}

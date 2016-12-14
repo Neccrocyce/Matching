@@ -82,7 +82,7 @@ public class Room {
 	public boolean equals (Object room) {
 		try {
 			Room r = (Room) room;
-			return r.getName() == this.getName();
+			return r.getName().equals(this.getName());
 		}
 		catch (ClassCastException | NullPointerException e){
 			return false;

@@ -13,8 +13,8 @@ public class Main {
 		outRooms = new File(FOLDER + "matchedRooms.csv");
 		outPersons = new File(FOLDER + "matchedPersons.csv");
 		
-		Room[] rooms = CsvReader.getIntance().extractRoomsFromFile(inRooms);
-		Person[] persons = CsvReader.getIntance().extractPersonsFromFile(inPersons);
+		Room[] rooms = CsvReader.getInstance().extractRoomsFromFile(inRooms);
+		Person[] persons = CsvReader.getInstance().extractPersonsFromFile(inPersons);
 		
 		matchFCFC (rooms, persons);
 		
