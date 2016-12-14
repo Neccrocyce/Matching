@@ -1,4 +1,4 @@
-saved file format:
+saved file format: csv
 ------------------
 rooms:
 name: String;capacity: int;preference1: String;... ;preferenceN: String\n ...

@@ -63,8 +63,10 @@ public class CsvReader {
 		for (int i = 0; i < file.length(); i++) {
 			if (file.charAt(i) == '"') {
 				escaped = !escaped;
+				file = file.substring(0,i) + file.substring(i + 1);
+				i--;
 			}
-			if (file.charAt(i) == ',' && !escaped) {
+			else if (file.charAt(i) == ',' && !escaped) {
 				file = file.substring(0, i) + ";" + file.substring(i + 1);
 			}
 		}

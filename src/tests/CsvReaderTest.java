@@ -50,25 +50,24 @@ public class CsvReaderTest {
 								   "p1;;r1;r2;r3\np2;;r1;r2;r3\np3;;r1;r2;r3",
 								   "p1;;r1;r2;r3\np2;r1;r2;r3",		//missing person
 								   "p1;4;r1;r2;r3\np2;;r1;r2;r3",	//invalid (ignored) argument 
-								   "p1;;r1;r2;;;",					//invalid argument
+								   "p1;;r1;r2;;;",					//empty argument
 								   "p1;;r1;r2\np2;;r1;r2\n\n",		//empty lines
-								   "\"p,1\",,r1,\"r,2\"\np2,,r1\"r,2\"",		//with comma
+								   "\"p,1\",,r1,\"r,2\"\np2,,r1,\"r,2\"",		//with comma
 								   "p1;1\np2\np3;;r1"				//too less arguments
 		};
+		//create directory
 		folder = "tests";
 		if (!new File(folder).exists()) {
 			new File(folder).mkdirs();
 		}
+		//create persons
 		folder += "/";
 		for (int i = 0; i < p.length; i++) {
-			if (!new File(folder + "p" + i + ".csv").exists()) {
-				createFile(new File(folder + "p" + i + ".csv"), p[i]);
-			}
+			createFile(new File(folder + "p" + i + ".csv"), p[i]);
 		}
+		//create rooms
 		for (int i = 0; i < r.length; i++) {
-			if (!new File(folder + "r" + i + ".csv").exists()) {
-				createFile(new File(folder + "r" + i + ".csv"), r[i]);
-			}
+			createFile(new File(folder + "r" + i + ".csv"), r[i]);
 		}
 		
 	}
@@ -180,6 +179,46 @@ public class CsvReaderTest {
 	}
 	
 	@Test
+	public void personEmptyArguments () {
+		Person[] pM = new Person[] {new Person("p1", new Room[] {new Room("r1", 1, new String[0]), new Room("r2", 2, new String[0])})};
+		Person[] p = CsvReader.getInstance().extractPersonsFromFile(new File(folder + "p4.csv"));
+		assertTrue(equalsPerson(pM, p));
+	}
+	
+	@Test
+	public void roomEmptyLines () {
+		Room[] rM = new Room[] {new Room("r1", 1, new String[] {"p1", "p2"}),
+								new Room("r2", 2, new String[] {"p1", "p2"})};
+		Room[] r = CsvReader.getInstance().extractRoomsFromFile(new File(folder + "r5.csv"));
+		assertTrue(equalsRooms(rM, r));
+	}
+	
+	@Test
+	public void personEmptyLines () {
+		Person[] pM = new Person[] {new Person("p1", new Room[] {new Room("r1", 1, new String[0]), new Room("r2", 2, new String[0])}),
+									new Person("p2", new Room[] {new Room("r1", 1, new String[0]), new Room("r2", 2, new String[0])})};
+		Person[] p = CsvReader.getInstance().extractPersonsFromFile(new File(folder + "p5.csv"));
+		assertTrue(equalsPerson(pM, p));
+	}
+	
+	@Test
+	public void roomWithComma () {
+		Room[] rM = new Room[] {new Room("r1", 1, new String[] {"p,1", "p2"}),
+								new Room("r,2", 2, new String[] {"p,1", "p2"})};
+		Room[] r = CsvReader.getInstance().extractRoomsFromFile(new File(folder + "r6.csv"));
+		assertTrue(equalsRooms(rM, r));
+	}
+	
+	@Test
+	public void personWithComma () {
+		Person[] pM = new Person[] {new Person("p,1", new Room[] {new Room("r1", 1, new String[0]), new Room("r,2", 2, new String[0])}),
+									new Person("p2", new Room[] {new Room("r1", 1, new String[0]), new Room("r,2", 2, new String[0])})};
+		CsvReader.getInstance().extractRoomsFromFile(new File(folder + "r6.csv"));
+		Person[] p = CsvReader.getInstance().extractPersonsFromFile(new File(folder + "p6.csv"));
+		assertTrue(equalsPerson(pM, p));
+	}
+	
+	@Test
 	public void roomTooLessArguments () {
 		String msg = "Too less arguments at Room1 \"r2\"";
 		try {
@@ -207,20 +246,58 @@ public class CsvReaderTest {
 		}
 	}
 	
+	@Test
+	public void roomValid () {
+		Room[] rM = new Room[] {new Room("r1", 1, new String[] {"p1", "p2", "p3"}),
+								new Room("r2", 2, new String[] {"p1", "p2", "p3"}),
+								new Room("r3", 3, new String[] {"p1", "p2", "p3"})};
+		Room[] r = CsvReader.getInstance().extractRoomsFromFile(new File(folder + "r1.csv"));
+		assertTrue(equalsRooms(rM, r));
+	}
+	
+	@Test
+	public void personValid () {
+		Person[] pM = new Person[] {new Person("p1", new Room[] {new Room("r1", 1, new String[0]), new Room("r2", 2, new String[0]), new Room("r3", 3, new String[0])}),
+									new Person("p2", new Room[] {new Room("r1", 1, new String[0]), new Room("r2", 2, new String[0]), new Room("r3", 3, new String[0])}),
+									new Person("p3", new Room[] {new Room("r1", 1, new String[0]), new Room("r2", 2, new String[0]), new Room("r3", 3, new String[0])})};
+		CsvReader.getInstance().extractRoomsFromFile(new File(folder + "r1.csv"));
+		Person[] p = CsvReader.getInstance().extractPersonsFromFile(new File(folder + "p1.csv"));
+		assertTrue(equalsPerson(pM, p));
+	}
+	
+//	@Test
+//	public void RoomsNotExist () {
+//		String msg = "Rooms do not exist";
+//		try {
+//			CsvReader.getInstance().extractPersonsFromFile(new File(folder + "p1.csv"));
+//			fail("EXPECTED: IllegalArgumentException: " + msg);
+//		}
+//		catch (IllegalArgumentException e) {
+//			if (!e.getMessage().equals(msg)) {
+//				fail("EXPECTED: IllegalArgumentException: " + msg + ", GOT: " + e.getMessage());
+//			}
+//		}
+//	}
+	
+	/**
+	 * 
+	 * @param r
+	 * @param r2
+	 * @return
+	 */
 	private boolean equalsRooms (Room[] r, Room[] r2) {
+		if (r.length != r2.length) {
+			return false;
+		}
 		boolean eq = true;
 		for (int i = 0; i < r.length; i++) {
 			eq &= r[i].getName().equals(r2[i].getName());
 			eq &= (r[i].getCapacity() == r2[i].getCapacity());
-			int j = 0;
-			while (true) {
-				try {
-					eq &= r[i].getPreference(j).equals(r2[i].getPreference(j));
-					j++;
-				} catch (ArrayIndexOutOfBoundsException e) {
-					break;
-				}
-				
+			if (r[i].getPreferences().length != r2[i].getPreferences().length) {
+				return false;
+			}
+			for (int j = 0; j < r.length; j++) {
+				eq &= r[i].getPreference(j).equals(r2[i].getPreference(j));
 			}
 		}
 		return eq;
@@ -228,18 +305,17 @@ public class CsvReaderTest {
 	
 	
 	private boolean equalsPerson (Person[] p, Person[] p2) {
+		if (p.length != p2.length) {
+			return false;
+		}
 		boolean eq = true;
 		for (int i = 0; i < p.length; i++) {
 			eq &= p[i].getName().equals(p2[i].getName());
-			int j = 0;
-			while (true) {
-				try {
-					eq &= p[i].getPreference(j).equals(p2[i].getPreference(j));
-					j++;
-				} catch (ArrayIndexOutOfBoundsException e) {
-					break;
-				}
-				
+			if (p[i].getPreferences().length != p2[i].getPreferences().length) {
+				return false;
+			}
+			for (int j = 0; j < p.length; j++) {
+				eq &= p[i].getPreference(j).equals(p2[i].getPreference(j));
 			}
 		}
 		return eq;

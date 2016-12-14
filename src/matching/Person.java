@@ -42,6 +42,10 @@ public class Person {
 		return preferences[index];
 	}
 	
+	public Room[] getPreferences () {
+		return this.preferences;
+	}
+	
 	public boolean existPreferences () {
 		return preferences != null;
 	}

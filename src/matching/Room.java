@@ -48,6 +48,10 @@ public class Room {
 		return this.preferences[index];
 	}
 	
+	public Person[] getPreferences () {
+		return this.preferences;
+	}
+	
 	/**
 	 * 
 	 * @param person
