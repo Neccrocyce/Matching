@@ -160,9 +160,10 @@ public class RoomTest {
 	
 	@Test
 	public void toStringTest () {
+		assertEquals("r1;1", r[0].toString());
 		r[0].addPerson(p1);
-		assertEquals("r1;1;p1;", r[0].toString());
+		assertEquals("r1;1;p1", r[0].toString());
 		r[0].addPerson(p2);
-		assertEquals("r1;1;p1;p2;", r[0].toString());
+		assertEquals("r1;1;p1;p2", r[0].toString());
 	}
 }

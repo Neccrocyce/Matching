@@ -53,7 +53,9 @@ public class CsvReaderTest {
 								   "p1;;r1;r2;;;",					//empty argument
 								   "p1;;r1;r2\np2;;r1;r2\n\n",		//empty lines
 								   "\"p,1\",,r1,\"r,2\"\np2,,r1,\"r,2\"",		//with comma
-								   "p1;1\np2\np3;;r1"				//too less arguments
+								   "p1;1\np2\np3;;r1",				//too less arguments
+								   "p1;;r1;r2;r3\np2;r1;random;r3\np3;;r1;r2;r3",	//random
+								   "p1;;r1;r2;r3\np2;r1;indif;r3\np3;;r1;r2;r3"		//indifferent
 		};
 		//create directory
 		folder = "tests";
@@ -86,8 +88,7 @@ public class CsvReaderTest {
 				e.printStackTrace();
 			} catch (IOException e1) {
 			}
-		}
-		
+		}		
 	}
 	
 	@Before
@@ -262,6 +263,34 @@ public class CsvReaderTest {
 									new Person("p3", new Room[] {new Room("r1", 1, new String[0]), new Room("r2", 2, new String[0]), new Room("r3", 3, new String[0])})};
 		CsvReader.getInstance().extractRoomsFromFile(new File(folder + "r1.csv"));
 		Person[] p = CsvReader.getInstance().extractPersonsFromFile(new File(folder + "p1.csv"));
+		assertTrue(equalsPerson(pM, p));
+	}
+	
+	@Test
+	public void personRandom () {
+		Room[] rM = new Room[] {new Room("r1", 1, new String[] {"p1", "p2", "p3"}),
+				new Room("r2", 2, new String[] {"p1", "p2", "p3"}),
+				new Room("r3", 3, new String[] {"p1", "p2", "p3"})};
+		Room[] r = CsvReader.getInstance().extractRoomsFromFile(new File(folder + "r1.csv"));
+		Person[] pM = new Person[] {new Person("p1", rM),
+				new Person("p2", rM),
+				new Person("p3", rM)};
+		Person[] p = CsvReader.getInstance().extractPersonsFromFile(new File(folder + "p8.csv"));
+		assertTrue(equalsRooms(rM, r));
+		assertTrue(!equalsPerson(pM, p));
+	}
+	
+	@Test
+	public void personIndifferent () {
+		Room[] rM = new Room[] {new Room("r1", 1, new String[] {"p1", "p2", "p3"}),
+				new Room("r2", 2, new String[] {"p1", "p2", "p3"}),
+				new Room("r3", 3, new String[] {"p1", "p2", "p3"})};
+		Room[] r = CsvReader.getInstance().extractRoomsFromFile(new File(folder + "r1.csv"));
+		Person[] pM = new Person[] {new Person("p1", rM),
+				new Person("p2", new Room[] {rM[2], rM[1], rM[0]}),
+				new Person("p3", rM)};
+		Person[] p = CsvReader.getInstance().extractPersonsFromFile(new File(folder + "p9.csv"));
+		assertTrue(equalsRooms(rM, r));
 		assertTrue(equalsPerson(pM, p));
 	}
 	

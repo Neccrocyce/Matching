@@ -88,9 +88,9 @@ public class Person {
 	
 	@Override
 	public String toString () {
-		String content = this.name + ";" + this.isRoom.getName() + ";;";
+		String content = this.name + ";" + (this.isInRoom() ? this.isRoom.getName() : "") + ";";
 		for (Room r : preferences) {
-			content += r.getName() + ";";
+			content += ";" + r.getName();
 		}
 		return content;
 	}

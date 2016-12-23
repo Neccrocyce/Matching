@@ -70,7 +70,8 @@ public class PersonTest {
 	@Test
 	public void testToString () {
 		p[0].setIstRoom(r[0]);
-		assertEquals("p1;r1;;r1;r2;r3;", p[0].toString());
+		assertEquals("p1;r1;;r1;r2;r3", p[0].toString());
+		assertEquals("p2;;;r1;r3;r2", p[1].toString());
 	}
 	
 	@Test
