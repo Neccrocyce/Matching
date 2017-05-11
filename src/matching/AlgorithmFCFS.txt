@@ -23,3 +23,9 @@ P:= Person; WZ:= Präferenz des Zimmers; WP := Präferenz der Person; Z:= Zimmer
 2.) Überprüfe ob ein P existiert, das nicht in ein Z ist
 	nein: stop
 	ja: goto 1.)
+
+	
+Sonderrollen:
+--------------
+Random: At initializing WP of P(random) will random set
+Indifferent: P(indifferent) will set to the room with the most free capacities (the first one of ones)
