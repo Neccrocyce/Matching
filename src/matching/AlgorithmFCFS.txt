@@ -7,25 +7,25 @@ persons:
 name: String;;preference1: String;preference2: String\n
 
 
-P:= Person; WZ:= Präferenz des Zimmers; WP := Präferenz der Person; Z:= Zimmer
+P:= Person; WZ:= PrÃ¤ferenz des Zimmers; WP := PrÃ¤ferenz der Person; Z:= Zimmer
 
-1.) Wähle zufällig ein Z (Z1) (das erste Z)
-1.1) Überprüfe ob Z1 voll ist
+1.) WÃ¤hle zufÃ¤llig ein Z (Z1) (das erste Z)
+1.1) ÃœberprÃ¼fe ob Z1 voll ist
 	ja: goto 1.4)
 	nein: goto 1.2)
-1.2) Überprüfe ob Person WZ1 von Z1 in ein Z (Zist) ist
+1.2) ÃœberprÃ¼fe ob Person WZ1 von Z1 in ein Z (Zist) ist
 	nein: Trage Person WZ1 von Z1 in Z1 ein; goto 1.4)
-	ja: Überprüfe ob WPp=Z1 < WPp=Zist; WPp = WP von WZ1 (Teste ob Person WZ1 lieber in dieses Zimmer möchte)
+	ja: ÃœberprÃ¼fe ob WPp=Z1 < WPp=Zist; WPp = WP von WZ1 (Teste ob Person WZ1 lieber in dieses Zimmer mÃ¶chte)
 		ja: Trage Person WZ1 von Z1 in Z1 ein; goto 1.4)
 		nein: goto 1.3)
-1.3) Wiederhole 1.2) für alle WZ von Z1
-1.4) Wiederhole 1. für alle Z
-2.) Überprüfe ob ein P existiert, das nicht in ein Z ist
+1.3) Wiederhole 1.2) fÃ¼r alle WZ von Z1
+1.4) Wiederhole 1. fÃ¼r alle Z
+2.) ÃœberprÃ¼fe ob ein P existiert, das nicht in ein Z ist
 	nein: stop
 	ja: goto 1.)
 
 	
 Sonderrollen:
 --------------
-Random: At initializing WP of P(random) will random set
-Indifferent: P(indifferent) will set to the room with the most free capacities (the first one of ones)
+Random: At initializing WP of P(random) is randomly set
+Indifferent: P(indifferent) is set to the room with the most free capacities (the first one of ones)
