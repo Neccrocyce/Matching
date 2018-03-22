@@ -7,10 +7,10 @@ persons:
 name: String;;preference1: String;preference2: String\n
 
 
-P:= Person; W := Pr‰ferenz der Person (W1: erste Pr‰ferenz, ...); Z:= Zimmer; U:= Anzahl P in Z - Kapatiz‰t von Z
-Select Xn:=X: W‰hle (ein) X das im folgenden als Xn definiert ist;  x From Y: ... ein x aus Y
-random: zuf‰llig eins (aber nie eins doppelt; sorted: der reihe nach w‰hlen, erstes zuerst (default); 
-max(X.y): gibt das Element X zur¸ck mit den grˆﬂten y (bei mehr als einem X: das erste)
+P:= Person; W := Pr√§ferenz der Person (W1: erste Pr√§ferenz, ...); Z:= Zimmer; U:= Anzahl P in Z - Kapazit√§t von Z
+Select Xn:=X: W√§hle (ein) X das im folgenden als Xn definiert ist;  x From Y: ... ein x aus Y
+random: zuf√§llig eins (aber nie eins doppelt; sorted: der reihe nach w√§hlen, erstes zuerst (default); 
+max(X.y): gibt das Element X zur√ºck mit den gr√∂√üten y (bei mehr als einem X: das erste)
 
 /*
 	Select Z1:=Z where max(Z.U)
@@ -111,7 +111,7 @@ kurz neu:
 	  	do
 		  	if (n2[i] > 0) then
 		  		n2[i]--
-				if (P1.Wi.U = 0 && NOT P1.Wi = Z1) then		//falls P1 bereits in zweiter Pr‰ferenz
+				if (P1.Wi.U = 0 && NOT P1.Wi = Z1) then		//falls P1 bereits in zweiter Pr√§ferenz
 					goDeeper &= Goto inner_loop (n2, Z[] + Z1, Pi.Wi)
 				endif
 				if (P1.Wi.U < 0) then
