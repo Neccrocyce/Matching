@@ -30,7 +30,7 @@ public class CsvReader {
 	 * @param file
 	 * @return content of file as String or null if some error occurred
 	 */
-	@SuppressWarnings("unused")
+
 	private String read (File file) {
 		String in = "";
 		FileReader r = null;
@@ -117,17 +117,18 @@ public class CsvReader {
 					if (preference[j] == null) {
 						if (pref[j].equals("random")) {
 							random = true;
-							break;
 						}
 						else if (pref[j].equals("indif")) {
 							indifferent = true;
 							break;
+						} else {
+							throw new IllegalArgumentException("Preference \"" + pref[j] + "\" of Person" + i + " \"" + (name) + "\" does not exist");
 						}
-						throw new IllegalArgumentException("Preference \"" + pref[j] + "\" of Person" + i + " \"" + (name) + "\" does not exist");
 					}
 				}
 				if (random) {
-					persons[i] = new Person(name, rooms.clone(), true);
+					persons[i] = new Person(name, preference);
+					persons[i].setEmptyPreferencesRandomly(rooms);
 				}
 				else if (indifferent) {
 					persons[i] = new PersonIndifferent(name, rooms.clone());
@@ -138,7 +139,15 @@ public class CsvReader {
 			}
 		}
 	}
-	
+
+	/**
+	 * This method reads a file ot type csv containing rooms, each room is written in one line.
+	 * Each line has the following structure:
+	 * String:name;int:capacity;String:nameOfPreference1;String:nameOfPreference2;...
+	 * @param file the file locating the csv-file
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
 	public Room[] extractRoomsFromFile (File file) throws IllegalArgumentException {
 		extract(TYPE_ROOM, read(file));
 		for (int i = 0; i < rooms.length; i++) {
@@ -150,7 +159,15 @@ public class CsvReader {
 		}
 		return rooms;
 	}
-	
+
+	/**
+	 * This method reads a file ot type csv containing persons, each person is written in one line.
+	 * Each line has the following structure:
+	 * String:name;;String:nameOfPreference1;String:nameOfPreference2;...
+	 * @param file
+	 * @return
+	 * @throws NullPointerException
+	 */
 	public Person[] extractPersonsFromFile (File file) throws NullPointerException {
 		if (rooms == null) {
 			throw new NullPointerException("Rooms do not exists");

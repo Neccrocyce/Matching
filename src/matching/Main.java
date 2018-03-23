@@ -3,17 +3,40 @@ package matching;
 import java.io.File;
 import java.util.Scanner;
 
+/**
+ * This class matches persons to room. For this it reads to files of type csv each containing all rooms or all persons.
+ * Each Person has its preferred rooms. The csv file for the persons is called persons.csv and has the following format: <br>
+ * String:name;;String:nameOfPreference1;String:nameOfPreference2;... <br>
+ * if not all preferences are relevant than write for these preferences "random" as preference, e.g: <br>
+ * String:name;;String:nameOfPreference1;random;... <br>
+ * if the preferences are indifferent then write "indif" as first preference and leave the other preferences empty. <br><br>
+ * Each room can have its own preferences. The csv file for the rooms is called rooms.csv has the following format: <br>
+ * String:name;int:capacity;String:nameOfPreference1;String:nameOfPreference2;... <br>
+ * if there are no preferences for the rooms then leave the preferences empty.
+ * If the FCFS-algorithm or the HPMatcher with room preferences is used then it is obligated to add room preferences.
+ *
+ * @see CsvReader
+ *
+ */
 public class Main {
-	private static File inRooms, inPersons, outRooms, outPersons;
-	public final static String DIR = "E:\\Bernie\\TumSog\\Austria0317\\";
-	
+
 	public static void main (String[] args) {
-		
-		inRooms = new File(DIR + "rooms.csv");
-		inPersons = new File(DIR + "persons.csv");
-		outRooms = new File(DIR + "matchedRooms.csv");
-		outPersons = new File(DIR + "matchedPersons.csv");
-		
+		//set directory
+		Scanner in = new Scanner(System.in);
+		System.out.println("Path to the directory:");
+		String dir = in.nextLine();
+		in.close();
+		if (!new File(dir + "rooms.csv").exists() || !new File(dir + "persons.csv").exists()) {
+			System.out.println("No files found");
+			return;
+		}
+
+		//read and extract files
+		File inRooms = new File(dir + "rooms.csv");
+		File inPersons = new File(dir + "persons.csv");
+		File outRooms = new File(dir + "matchedRooms.csv");
+		File outPersons = new File(dir + "matchedPersons.csv");
+
 		Room[] rooms = CsvReader.getInstance().extractRoomsFromFile(inRooms);
 		Person[] persons = CsvReader.getInstance().extractPersonsFromFile(inPersons);
 
@@ -23,7 +46,7 @@ public class Main {
 				"HPMatcher without room preferences (default): 2\n" +
 				"HPMatcher with room preferences: 3\n" +
 				"Exit: Anything else");
-		Scanner in  = new Scanner(System.in);
+		in  = new Scanner(System.in);
 		boolean successful = true;
 		switch (in.next()) {
 			case "1":

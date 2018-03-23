@@ -34,9 +34,13 @@ public class FCFSMatcher extends Matcher {
 				}
 			}
 			if (isAllRoomsFull() || !changed) {
-				break;
+				for (Person p : super.getPersons()) {
+					if (!p.isInRoom()) {
+						return false;
+					}
+				}
+				return true;
 			}
 		}
-		return true;
 	}
 }

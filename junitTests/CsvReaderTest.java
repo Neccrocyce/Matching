@@ -52,7 +52,7 @@ public class CsvReaderTest {
 								   "p1;;r1;r2\np2;;r1;r2\n\n",		//empty lines
 								   "\"p,1\",,r1,\"r,2\"\np2,,r1,\"r,2\"",		//with comma
 								   "p1;1\np2\np3;;r1",				//too less arguments
-								   "p1;;r1;r2;r3\np2;r1;random;r3\np3;;r1;r2;r3",	//random
+								   "p1;;r1;r2;r3\np2;;r1;random;r3\np3;;r1;r2;r3",	//random
 								   "p1;;r1;r2;r3\np2;r1;indif;r3\np3;;r1;r2;r3"		//indifferent
 		};
 		//create directory
@@ -275,7 +275,7 @@ public class CsvReaderTest {
 				new Person("p3", rM)};
 		Person[] p = CsvReader.getInstance().extractPersonsFromFile(new File(directory + "p8.csv"));
 		assertTrue(equalsRooms(rM, r));
-		assertTrue(!equalsPerson(pM, p));
+		assertTrue(equalsPerson(pM, p));
 	}
 	
 	@Test

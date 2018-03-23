@@ -11,3 +11,13 @@ number of persons equals free slots
 
 without room preferences
 with room preferences
+
+
+test cases fcfs matcher:
+-----------------------
+no overcrowded
+one time changing
+two time changing
+
+more people than rooms
+number of persons equals free slots

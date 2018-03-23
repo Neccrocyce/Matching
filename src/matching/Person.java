@@ -1,10 +1,15 @@
 package matching;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Person {
 	protected final String name;
 	protected final Room[] preferences;
 	protected Room isRoom;
-	
+
+	@Deprecated
 	public Person (String name, Room[] preferences, boolean random) {
 		this.name = name;
 		if (random) {
@@ -36,6 +41,27 @@ public class Person {
 	
 	public void setIstRoom (Room istRoom) {
 		this.isRoom = istRoom;
+	}
+
+	public void setEmptyPreferencesRandomly (Room[] rooms) {
+		List<Room> missingRooms = new ArrayList<>();
+		for (Room r : rooms) {
+			boolean inPrefs = false;
+			for (Room pref : preferences) {
+				if (r == pref) {
+					inPrefs = true;
+				}
+			}
+			if (!inPrefs) {
+				missingRooms.add(r);
+			}
+		}
+		Collections.shuffle(missingRooms);
+		for (int i = 0; i < preferences.length; i++) {
+			if (preferences[i] == null) {
+				preferences[i] = missingRooms.remove(0);
+			}
+		}
 	}
 
 	/**
