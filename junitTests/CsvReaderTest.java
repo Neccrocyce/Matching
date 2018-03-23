@@ -56,12 +56,11 @@ public class CsvReaderTest {
 								   "p1;;r1;r2;r3\np2;r1;indif;r3\np3;;r1;r2;r3"		//indifferent
 		};
 		//create directory
-		directory = "";
+		directory = CsvReaderTest.class.getResource("").getPath() + "/tests";
 		if (!new File(directory).exists()) {
 			new File(directory).mkdirs();
 		}
 		//create persons
-		directory += "/";
 		for (int i = 0; i < p.length; i++) {
 			createFile(new File(directory + "p" + i + ".csv"), p[i]);
 		}
@@ -72,7 +71,7 @@ public class CsvReaderTest {
 		
 	}
 	
-	private static void createFile (File path, String content) {
+	static void createFile (File path, String content) {
 		FileWriter out = null;
 		try {
 			path.createNewFile();

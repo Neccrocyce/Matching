@@ -7,8 +7,8 @@ import org.junit.Test;
 
 
 public class HPMatcherTest {
-    private Room[] r;
-    private Person[] p;
+    private static Room[] r;
+    private static Person[] p;
 
     @BeforeClass
     public static void setup () {
@@ -22,20 +22,20 @@ public class HPMatcherTest {
     @Test
     public void testWithoutRoomPreference () {
         r = new Room[3];
-        r[0] = new Room("r1", 1);
+        r[0] = new Room("r1", 3);
         r[1] = new Room("r2", 1);
-        r[2] = new Room("r3", 3);
+        r[2] = new Room("r3", 1);
 
         p = new Person[3];
-        p[0] = new Person("p1", new Room[] {r[0], r[2], r[1]});
-        p[1] = new Person("p2", new Room[] {r[1], r[0], r[2]});
-        p[2] = new Person("p3", new Room[] {r[0], r[1], r[2]});
+        p[0] = new Person("p1", new Room[] {r[2], r[0], r[1]});
+        p[1] = new Person("p2", new Room[] {r[1], r[2], r[0]});
+        p[2] = new Person("p3", new Room[] {r[2], r[1], r[0]});
 
         new HPMatcher(r, p, false).match();
 
-        TestExtras.testIsPersonsInRoom(r[0], p[2]);
-        TestExtras.testIsPersonsInRoom(r[1], p[1]);
-        TestExtras.testIsPersonsInRoom(r[2], p[0]);
+        TestExtras.testIsPersonsInRoom(findRoom("r3"), p[2]);
+        TestExtras.testIsPersonsInRoom(findRoom("r2"), p[1]);
+        TestExtras.testIsPersonsInRoom(findRoom("r1"), p[0]);
     }
 
     @Test
@@ -187,5 +187,14 @@ public class HPMatcherTest {
         TestExtras.testIsPersonsInRoom(r[0], p[0]);
         TestExtras.testIsPersonsInRoom(r[1], p[2]);
         TestExtras.testIsPersonsInRoom(r[2], p[1]);
+    }
+
+    private static Room findRoom (String name) {
+        for (Room room : r) {
+            if (room.getName().equals(name)) {
+                return room;
+            }
+        }
+        return null;
     }
 }

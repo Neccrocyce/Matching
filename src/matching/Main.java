@@ -24,10 +24,10 @@ public class Main {
 		//set directory
 		Scanner in = new Scanner(System.in);
 		System.out.println("Path to the directory:");
-		String dir = in.nextLine();
-		in.close();
+		String dir = in.nextLine() + "/";
 		if (!new File(dir + "rooms.csv").exists() || !new File(dir + "persons.csv").exists()) {
 			System.out.println("No files found");
+			in.close();
 			return;
 		}
 
@@ -46,7 +46,6 @@ public class Main {
 				"HPMatcher without room preferences (default): 2\n" +
 				"HPMatcher with room preferences: 3\n" +
 				"Exit: Anything else");
-		in  = new Scanner(System.in);
 		boolean successful = true;
 		switch (in.next()) {
 			case "1":
@@ -72,7 +71,7 @@ public class Main {
 		
 	}
 	
-	public static boolean matchFCFC (Room[] r, Person[] p) {
+	private static boolean matchFCFC (Room[] r, Person[] p) {
 		FCFSMatcher matcher = new FCFSMatcher(r, p);
 		return matcher.match();
 	}
