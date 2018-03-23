@@ -20,6 +20,15 @@ public class Room {
 		
 		personsInRoom = new ArrayList<>();
 	}
+
+	/**
+	 * creates a room without preferences
+	 * @param name
+	 * @param capacity
+	 */
+	public Room (String name, int capacity) {
+		this(name, capacity, new String[0]);
+	}
 	
 	//replace the persons placeholder with real persons
 	public void setPreferences (Person[] persons) {
@@ -44,12 +53,26 @@ public class Room {
 		return this.capacity;
 	}
 	
-	public Person getPreference (int index) {
+	public Person getPreference (int index) throws ArrayIndexOutOfBoundsException {
 		return this.preferences[index];
 	}
 	
 	public Person[] getPreferences () {
-		return this.preferences;
+		return this.preferences.clone();
+	}
+
+	/**
+	 *
+	 * @param p
+	 * @return the preference of the person in the room or Integer max values if there is no preference for this person
+	 */
+	public int findPreference (Person p) {
+		for(int i = 0; i < preferences.length; i++) {
+			if (preferences[i] == p) {
+				return i;
+			}
+		}
+		return Integer.MAX_VALUE;
 	}
 	
 	/**
@@ -73,11 +96,24 @@ public class Room {
 	public Person getPerson (int index) {
 		return personsInRoom.get(index);
 	}
-	
+
+	public Person[] getPersonsInRoom () {
+		return personsInRoom.toArray(new Person[personsInRoom.size()]);
+	}
+
+	/**
+	 * This method returns if there aren't any free slots in this room
+	 * @return true if and only if there are no empty slots in this room. It returns also true if this room is overcrowded
+	 */
 	public boolean isFull () {
 		return personsInRoom.size() >= capacity;
 	}
-	
+
+	/**
+	 * This method returns the number of free slots in this room.
+	 * If there are more persons in this room than capable then it returns a negative number. The absolute value of this number correspond to the surplus of persons in this room.
+	 * @return the number of free slots in this room
+	 */
 	public int numberOfFreeSlots () {
 		return capacity - personsInRoom.size();
 	}

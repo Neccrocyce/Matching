@@ -98,7 +98,7 @@ public class CsvReader {
 			try {
 				capacity = Integer.parseInt(val[1]);
 			} catch (NumberFormatException e) {
-				if (type == TYPE_ROOM) throw new IllegalArgumentException("Capacity at " + (type == TYPE_ROOM ? "Room" : "Person") + i + " \"" + (name) + "\" is not valid");
+				if (type == TYPE_ROOM) throw new IllegalArgumentException("Capacity at Room" + i + " \"" + (name) + "\" is not valid");
 			}
 			//set preferences
 			String[] pref = new String[val.length - 2];

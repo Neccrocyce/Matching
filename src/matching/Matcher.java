@@ -1,54 +1,48 @@
 package matching;
 
-public class Matcher {	
-	private Room[] rooms;
-	
-	
-	public Matcher (Room[] rooms, Person[] persons) {
-		this.rooms = rooms;
-	}
-	
-	public void matchFCFS () {
-		boolean changed;
-		while (true) {
-			changed = false;
-			for (int i = 0; i < rooms.length; i++) {
-				for (int j = 0; j < rooms[i].preferencesSize(); j++) {
-					if (!rooms[i].isFull()) {
-						//test if j preference of room is not in another room
-						if (!rooms[i].getPreference(j).isInRoom()) {
-							rooms[i].addPerson(rooms[i].getPreference(j)); //??
-							rooms[i].getPreference(j).setIstRoom(rooms[i]);
-							changed = true;
-							break;
-						}
-						else {
-							// test if j preference of room prefer this room
-							if (rooms[i].getPreference(j).preferRoom(rooms[i])) {
-								rooms[i].getPreference(j).getIstRoom().removePerson(rooms[i].getPreference(j));
-								rooms[i].addPerson(rooms[i].getPreference(j));
-								rooms[i].getPreference(j).setIstRoom(rooms[i]);
-								changed = true;
-								break;
-							}
-						}
-					}
-				}
-			}
-			if (allRoomsFull() || !changed) {
-				break;
-			}
-		}
-	}
-	
-	private boolean allRoomsFull () {
-		boolean full = true;
-		for (Room r : rooms) {
-			full = full && r.isFull();
-		}
-		return full;
-	}
-	
-	
-	
+public abstract class Matcher {
+    private Room[] rooms;
+    private Person[] persons;
+
+    public Matcher(Room[] rooms, Person[] persons) {
+        this.rooms = rooms;
+        this.persons = persons;
+    }
+
+    protected Room[] getRooms() {
+        return rooms;
+    }
+
+    protected Person[] getPersons() {
+        return persons;
+    }
+
+    public abstract void match();
+
+    /**
+     *
+     * @return if all rooms are full and/or overcrowded
+     */
+    protected boolean isAllRoomsFull() {
+        boolean full = true;
+        for (Room r : rooms) {
+            full = full && r.isFull();
+        }
+        return full;
+    }
+
+    /**
+     *
+     * @return if there is any room that is overcrowded
+     */
+    protected boolean isAnyRoomOvercrowded () {
+        for (Room r : rooms) {
+            if (r.numberOfFreeSlots() < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

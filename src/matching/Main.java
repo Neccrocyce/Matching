@@ -4,14 +4,14 @@ import java.io.File;
 
 public class Main {
 	public static File inRooms, inPersons, outRooms, outPersons;
-	public final static String FOLDER = "E:\\Bernie\\TumSog\\Austria0317\\";
+	public final static String DIR = "E:\\Bernie\\TumSog\\Austria0317\\";
 	
 	public static void main (String[] args) {
 		
-		inRooms = new File(FOLDER + "rooms.csv");
-		inPersons = new File(FOLDER + "persons.csv");
-		outRooms = new File(FOLDER + "matchedRooms.csv");
-		outPersons = new File(FOLDER + "matchedPersons.csv");
+		inRooms = new File(DIR + "rooms.csv");
+		inPersons = new File(DIR + "persons.csv");
+		outRooms = new File(DIR + "matchedRooms.csv");
+		outPersons = new File(DIR + "matchedPersons.csv");
 		
 		Room[] rooms = CsvReader.getInstance().extractRoomsFromFile(inRooms);
 		Person[] persons = CsvReader.getInstance().extractPersonsFromFile(inPersons);
@@ -24,7 +24,7 @@ public class Main {
 	}
 	
 	public static void matchFCFC (Room[] r, Person[] p) {
-		Matcher matcher = new Matcher(r, p);
-		matcher.matchFCFS();
+		FCFSMatcher matcher = new FCFSMatcher(r, p);
+		matcher.match();
 	}
 }

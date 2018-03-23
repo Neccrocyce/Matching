@@ -1,0 +1,132 @@
+saved file format: csv
+------------------
+rooms:
+name: String;capacity: int
+
+persons:
+name: String;;preference1: String;preference2: String\n
+
+
+P:= Person; W := Präferenz der Person (W1: erste Präferenz, ...); Z:= Zimmer; U:= Anzahl P in Z - Kapazität von Z
+Select Xn:=X: Wähle (ein) X das im folgenden als Xn definiert ist;  x From Y: ... ein x aus Y
+random: zufällig eins (aber nie eins doppelt; sorted: der reihe nach wählen, erstes zuerst (default); 
+max(X.y): gibt das Element X zurück mit den größten y (bei mehr als einem X: das erste)
+sum n = n[0] + n[1] + ... + n[n.length-1]
+#Z: Anzahl aller Zimmer
+
+kurz neu:
+---------
+	inner_loop: (int[] n, Z[], Z1)
+	while (Z1.U > -1 && NOT all Z1.P selected) do
+		Select random P1:=P From Z1
+		for (int i = n.lenth - 1 downto 2)
+	  	do
+			if (n[i] > 0) then
+			    n2 = n.clone
+				n2[i]--
+				if (P1.Wi.U = 0 && NOT P1.Wi = Z1 && NOT exists(P1.Wi in Z[]) then
+					GOTO inner_loop (n2, Z[] + Z1, Pi.Wi)
+				endif
+				if (P1.Wi.U < 0) then
+					P1.Z = P1.Wi
+					changed = true
+				endif
+				break
+			endif
+		done
+	done
+	
+	//@param n number each priority is used
+	outer_loop: 
+	INPUT n: int[], Z1
+
+	while (Z1.U > 0 && NOT all Z1.P selected) do
+		Select random P1:=P From Z1
+	  	for (int i = n.lenth - 1 downto 2)
+	  	do
+		  	if (n[i] > 0) then
+		  	    n2 = n.clone
+		  		n2[i]--
+				if (P1.Wi.U = 0 && NOT P1.Wi = Z1) then		//falls P1 bereits in i-ter Präferenz
+					GOTO inner_loop (n2, new Z[] + Z1, Pi.Wi)
+				endif
+				if (P1.Wi.U < 0) then
+					P1.Z = P1.Wi
+					changed = true
+				endif
+				break
+			endif
+		done
+	done
+	
+	
+	outer_outer_loop:
+	int n[] = new int[#Z+1]
+	n[2]=1
+	changed = false
+
+	while(exists(Any Z.U > 0))
+	do
+	    while (changed)
+	    do
+	        changed = false
+	        while(NOT all Z selected)
+	        do
+	            Select Z1:=Z where max(Z.U)
+	            GOTO outer_loop (n, Z1)
+	        done
+	    done
+	    CALL incN(n)
+	done
+
+	incN:
+	INPUT: n: int[]
+
+	switch (nn:= n[n.length-1], nn-1:= n[n.length-2], ..., n3:= n[3], n2:= n[2])
+	    case nn = #Z-1, n2 = 0, ..., nn-1 = 0
+	        -> EXIT
+        case sum(n) < #Z-1
+            -> n[2]++
+        case sum(n) = #Z-1
+            ->  for(i=2 to n.lenth-2)
+                do
+                    if (n[i] > 0) then
+                        n[i] = 0
+                        n[i+1]++
+                        break
+                    endif
+                done
+	endswitch
+	
+	
+	
+Durchlauf:
+----------
+n[1]+n[2]+...+n[n.length-1] < #Z-1 (Bedingung)
+
+	->2
+	->2->2
+	->2->2->2
+	...
+	
+	->3
+	->3->2
+	->3->2->2
+	...
+	
+	->3->3
+	->3->3->2
+	->3->3->2->2
+	...
+	
+	...
+	
+	->4
+	->4->2
+	...
+	
+	->4->3
+	->4->3->2
+	...
+	
+	...

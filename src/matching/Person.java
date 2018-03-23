@@ -37,13 +37,18 @@ public class Person {
 	public void setIstRoom (Room istRoom) {
 		this.isRoom = istRoom;
 	}
-	
+
+	/**
+	 *
+	 * @param index
+	 * @return the preference at index {@code index}. Note that index 0 is first preference, index 1 is second preference, etc.
+	 */
 	public Room getPreference (int index) {
 		return preferences[index];
 	}
 	
 	public Room[] getPreferences () {
-		return this.preferences;
+		return this.preferences.clone();
 	}
 	
 	public boolean existPreferences () {
