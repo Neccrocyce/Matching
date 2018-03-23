@@ -17,7 +17,7 @@ public abstract class Matcher {
         return persons;
     }
 
-    public abstract void match();
+    public abstract boolean match();
 
     /**
      *

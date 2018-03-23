@@ -18,7 +18,8 @@ public class HPMatcher extends Matcher {
     }
 
     @Override
-    public void match() {
+    public boolean match() {
+        putAllPersonsInRooms();
         int[] pref = new int[super.getRooms().length - 1];
         pref[0] = 1;
 
@@ -32,14 +33,15 @@ public class HPMatcher extends Matcher {
                     if (super.getRooms()[selected].numberOfFreeSlots() >= 0) {
                         break;
                     }
-                    changed = changed || loop(pref, new ArrayList<Room>(), super.getRooms()[selected],true);
+                    changed = changed || loop(pref, new ArrayList<>(), super.getRooms()[selected],true);
                     selected++;
                 }
             }
             if (!increasePref(pref)) {
-                break;
+                return false;
             }
         }
+        return true;
     }
 
     /**
@@ -62,7 +64,7 @@ public class HPMatcher extends Matcher {
                     int[] pref2 = pref.clone();
                     pref2[i]--;
                     //check if room is exactly full
-                    if (rPref.numberOfFreeSlots() == 0 && rPref != currentRoom && roomsWorkedThrough.contains(rPref)) {
+                    if (rPref.numberOfFreeSlots() == 0 && rPref != currentRoom && !roomsWorkedThrough.contains(rPref)) {
                         roomsWorkedThrough.add(currentRoom);
                         loop(pref2, roomsWorkedThrough, rPref,false);
                     }
@@ -93,16 +95,7 @@ public class HPMatcher extends Matcher {
             Collections.shuffle(plist);
             return plist.toArray(new Person[plist.size()]);
         } else {
-            Person[] prefs = room.getPreferences();
-            for (int i = 0; i < p.length; i++) {
-                for (int j = 0; j < i; j++) {
-                    if (room.findPreference(prefs[i]) > room.findPreference(prefs[j])) {
-                        Person temp = prefs[j];
-                        prefs[j] = prefs[i];
-                        prefs[i] = temp;
-                    }
-                }
-            }
+            Arrays.sort(p, Comparator.comparing(o -> -room.findPreference(o)));
             return p;
         }
     }
@@ -112,12 +105,7 @@ public class HPMatcher extends Matcher {
      * @param rooms
      */
     private void sortRooms (Room[] rooms) {
-        Arrays.sort(rooms, new Comparator<Room>() {
-            @Override
-            public int compare(Room o1, Room o2) {
-                return (o1.numberOfFreeSlots()) - (o2.numberOfFreeSlots());
-            }
-        });
+        Arrays.sort(rooms, Comparator.comparingInt(o -> (o.numberOfFreeSlots())));
     }
 
     /**

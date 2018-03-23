@@ -93,11 +93,11 @@ public class Person {
 	
 	@Override
 	public String toString () {
-		String content = this.name + ";" + (this.isInRoom() ? this.isRoom.getName() : "") + ";";
+		StringBuilder content = new StringBuilder(this.name + ";" + (this.isInRoom() ? this.isRoom.getName() : "") + ";");
 		for (Room r : preferences) {
-			content += ";" + r.getName();
+			content.append(";").append(r.getName());
 		}
-		return content;
+		return content.toString();
 	}
 	
 }

@@ -7,7 +7,7 @@ public class FCFSMatcher extends Matcher {
 	}
 
 	@Override
-	public void match() {
+	public boolean match() {
 		boolean changed;
 		while (true) {
 			changed = false;
@@ -37,5 +37,6 @@ public class FCFSMatcher extends Matcher {
 				break;
 			}
 		}
+		return true;
 	}
 }

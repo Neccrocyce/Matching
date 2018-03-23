@@ -1,0 +1,13 @@
+test cases hp matcher:
+----------------------
+no overcroweded rooms
+one overcrowded room with only one time second preference
+two time second preference
+three time seond preference
+third preference
+third->second preference
+more people than rooms
+number of persons equals free slots
+
+without room preferences
+with room preferences

@@ -135,11 +135,11 @@ public class Room {
 	
 	@Override
 	public String toString() {
-		String content = this.name + ";" + this.capacity;
+		StringBuilder content = new StringBuilder(this.name + ";" + this.capacity);
 		for (Person p : this.personsInRoom) {
-			content += ";" + p.getName();
+			content.append(";").append(p.getName());
 		}
-		return content;
+		return content.toString();
 	}
 	
 	
